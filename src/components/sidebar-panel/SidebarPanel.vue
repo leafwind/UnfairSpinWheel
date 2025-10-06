@@ -118,7 +118,7 @@
       <TabPanel header="⚙️ 設定">
         <div v-focustrap>
           <div class="col-12">
-            <label for="dd-sound" class="block mb-2">選擇指針音效</label>
+            <label for="dd-sound" class="block mb-2">指針音效</label>
             <div class="grid">
               <div class="col-8">
                 <Dropdown
@@ -148,7 +148,7 @@
             </div>
           </div>
           <div class="col-12">
-            <label for="dd-sound" class="block mb-2">選擇恭喜音效</label>
+            <label for="dd-sound" class="block mb-2">選中音效</label>
             <div class="grid">
               <div class="col-8">
                 <Dropdown
@@ -178,7 +178,7 @@
             </div>
           </div>
           <div class="col-12">
-            <label for="sl-labelLength" class="block mb-2">Item Label Length</label>
+            <label for="sl-labelLength" class="block mb-2">轉盤文字大小</label>
             <Slider
               v-model="LabelLength"
               inputId="sl-labelLength"
@@ -188,7 +188,7 @@
             />
           </div>
           <div class="col-12">
-            <label for="sl-labelLength" class="block mb-2">Fair mode</label>
+            <label for="sl-labelLength" class="block mb-2">公平模式</label>
             <ToggleButton
               v-model="Fairmode"
               @change="
