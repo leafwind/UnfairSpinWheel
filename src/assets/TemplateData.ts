@@ -3,183 +3,183 @@ export const templateItems = [
     group: '晚餐吃什麼?',
     label: '火鍋',
     weight: 5,
-    order: 24
+    order: 0
   },
   {
     group: '晚餐吃什麼?',
     label: '牛肉麵',
     weight: 4,
-    order: 25
+    order: 1
   },
   {
     group: '晚餐吃什麼?',
     label: '牛排館',
     weight: 3,
-    order: 26
+    order: 2
   },
   {
     group: '晚餐吃什麼?',
     label: '拉麵',
     weight: 2,
-    order: 27
+    order: 3
   },
   {
     group: '晚餐吃什麼?',
     label: '便當店',
     weight: 1,
-    order: 28
+    order: 4
   },
   {
     group: '晚餐吃什麼?',
     label: '自助餐',
     weight: 1,
-    order: 29
+    order: 5
   },
   {
     group: '晚餐吃什麼?',
     label: '夜市',
     weight: 3,
-    order: 30
+    order: 6
   },
   {
     group: '晚餐吃什麼?',
     label: '速食店',
     weight: 10,
-    order: 31
+    order: 7
   },
   {
     group: '晚餐吃什麼?',
     label: '中餐館',
     weight: 3,
-    order: 32
+    order: 8
   },
 
   {
     group: "Who's the next winner?",
     label: 'Jim',
     weight: 5,
-    order: 0
+    order: 9
   },
   {
     group: "Who's the next winner?",
     label: 'John',
     weight: 1,
-    order: 1
+    order: 10
   },
   {
     group: "Who's the next winner?",
     label: 'Will',
     weight: 5,
-    order: 2
+    order: 11
   },
   {
     group: "Who's the next winner?",
     label: 'Mark',
     weight: 1,
-    order: 3
+    order: 12
   },
   {
     group: "Who's the next winner?",
     label: 'Emily',
     weight: 4,
-    order: 4
+    order: 13
   },
   {
     group: "Who's the next winner?",
     label: 'Sarah',
     weight: 3,
-    order: 5
+    order: 14
   },
   {
     group: "Who's the next winner?",
     label: 'David',
     weight: 2,
-    order: 6
+    order: 15
   },
   {
     group: "Who's the next winner?",
     label: 'Michael',
     weight: 1,
-    order: 7
+    order: 16
   },
   {
     group: "Who's the next winner?",
     label: 'Jessica',
     weight: 3,
-    order: 8
+    order: 17
   },
 
   {
     group: 'Motorcycle Club Raffle',
     label: 'Ducati Panigale V4',
     weight: 7,
-    order: 9
+    order: 18
   },
   {
     group: 'Motorcycle Club Raffle',
     label: 'BMW S1000RR',
     weight: 4,
-    order: 10
+    order: 19
   },
   {
     group: 'Motorcycle Club Raffle',
     label: 'Yamaha YZF-R1',
     weight: 6,
-    order: 11
+    order: 20
   },
   {
     group: 'Motorcycle Club Raffle',
     label: 'Kawasaki Ninja H2',
     weight: 8,
-    order: 12
+    order: 21
   },
   {
     group: 'Motorcycle Club Raffle',
     label: 'Yamaha MT-10',
     weight: 10,
-    order: 13
+    order: 22
   },
   {
     group: 'Motorcycle Club Raffle',
     label: 'Suzuki GSX-R1000',
     weight: 3,
-    order: 14
+    order: 23
   },
   {
     group: 'Motorcycle Club Raffle',
     label: 'Honda Gold Wing',
     weight: 2,
-    order: 15
+    order: 24
   },
   {
     group: 'Motorcycle Club Raffle',
     label: 'Triumph Rocket 3',
     weight: 2,
-    order: 16
+    order: 25
   },
   {
     group: 'Motorcycle Club Raffle',
     label: 'Aprilia RSV4',
     weight: 10,
-    order: 17
+    order: 26
   },
   {
     group: 'Motorcycle Club Raffle',
     label: 'Suzuki Hayabusa',
     weight: 3,
-    order: 19
+    order: 27
   },
   {
     group: 'Motorcycle Club Raffle',
     label: 'Indian Challenger',
     weight: 4,
-    order: 20
+    order: 28
   },
   {
     group: 'Motorcycle Club Raffle',
     label: 'Kawasaki Z H2',
     weight: 9,
-    order: 23
+    order: 29
   },
 
 ];
