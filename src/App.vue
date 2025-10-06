@@ -12,7 +12,7 @@
     <div class="max-w-screen overflow-x-hidden overflow-y-hidden">
       <div class="grid header text-center">
         <h1 class="col-12 mb-0 text-4xl sm:text-5xl md:text-6xl">
-          <span v-if="!Fairmode">不</span><span v-else>公平</span><span
+          <span v-if="!Fairmode">不公平</span><span v-else>公平</span><span
             class="white-space-nowrap"
             >事件轉盤</span
           >

@@ -22,9 +22,9 @@
         }
       }"
     >
-      <TabPanel header="📋 Items">
+      <TabPanel header="📋 轉盤主題">
         <div class="col-12">
-          <label for="dd-group" class="block mb-2">Select a Group</label>
+          <label for="dd-group" class="block mb-2">選擇一個轉盤主題</label>
           <div class="p-inputgroup">
             <Button
               icon="pi pi-trash"
@@ -62,8 +62,8 @@
             :modelValue="bulkEditMode"
             @change="toggleBulkEditMode"
             class="w-full border-round"
-            onLabel="Save"
-            offLabel="Bulk Edit"
+            onLabel="存檔"
+            offLabel="批次編輯"
             onIcon="pi pi-check"
             offIcon="pi pi-pencil"
             :pt="{
@@ -104,14 +104,14 @@
         <div v-else class="m-2">
           <Textarea v-model="textArea" />
           <small class="text-color-secondary"
-            >This feature uses
+            >此功能使用兩欄的 
             <a
               href="https://en.wikipedia.org/wiki/Comma-separated_values#Basic_rules"
               target="_blank"
               rel="noopener"
-              >the CSV syntax</a
+              >CSV 語法</a
             >
-            with two columns.</small
+            。</small
           >
         </div>
       </TabPanel>
