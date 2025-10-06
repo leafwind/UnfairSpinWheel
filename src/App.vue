@@ -12,21 +12,17 @@
     <div class="max-w-screen overflow-x-hidden overflow-y-hidden">
       <div class="grid header text-center">
         <h1 class="col-12 mb-0 text-4xl sm:text-5xl md:text-6xl">
-          <span v-if="!Fairmode">Unfair</span><span v-else>Fair</span>&nbsp;<span
+          <span v-if="!Fairmode">不</span><span v-else>公平</span><span
             class="white-space-nowrap"
-            >Spin Wheel</span
+            >事件轉盤</span
           >
         </h1>
         <p class="col-12 my-0 py-0 text-base sm:text-lg md:text-2xl" v-if="!Fairmode">
-          <span class="white-space-nowrap">The world is unfair,</span>&nbsp;<span
-            class="white-space-nowrap"
-            >and so is our spin wheel.</span
+          <span class="white-space-nowrap">特定事件會觸發自動轉盤</span
           >
         </p>
         <p class="col-12 my-0 py-0 text-base sm:text-lg md:text-2xl" v-else>
-          <span class="white-space-nowrap">Though the world is unfair,</span>&nbsp;<span
-            class="white-space-nowrap"
-            >fortune smiles on our spin wheel.</span
+          <span class="white-space-nowrap">特定事件會觸發自動轉盤（公平模式）</span
           >
         </p>
       </div>

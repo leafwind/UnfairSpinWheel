@@ -12,7 +12,7 @@
     }"
   >
     <template #header>
-      <h2><i class="pi pi-palette"></i> Customize</h2>
+      <h2><i class="pi pi-palette"></i> 自訂</h2>
     </template>
     <TabView
       :scrollable="true"
@@ -115,10 +115,10 @@
           >
         </div>
       </TabPanel>
-      <TabPanel header="⚙️ Settings">
+      <TabPanel header="⚙️ 設定">
         <div v-focustrap>
           <div class="col-12">
-            <label for="dd-sound" class="block mb-2">Select a Ticking Sound</label>
+            <label for="dd-sound" class="block mb-2">選擇指針音效</label>
             <div class="grid">
               <div class="col-8">
                 <Dropdown
@@ -148,7 +148,7 @@
             </div>
           </div>
           <div class="col-12">
-            <label for="dd-sound" class="block mb-2">Select a Congratulatory Sound</label>
+            <label for="dd-sound" class="block mb-2">選擇恭喜音效</label>
             <div class="grid">
               <div class="col-8">
                 <Dropdown
