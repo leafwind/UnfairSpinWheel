@@ -18,9 +18,9 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', '/img/icons/ios/180.png'],
       manifest: {
-        name: 'Unfair Spin Wheel',
-        short_name: 'Unfair Spin Wheel',
-        description: 'The world is unfair, and so is our spin wheel.',
+        name: '實況事件轉盤',
+        short_name: '實況事件轉盤',
+        description: '特定事件會觸發自動轉盤',
         theme_color: '#212f56',
         icons: [
           {

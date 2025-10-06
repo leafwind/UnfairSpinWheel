@@ -10,7 +10,7 @@
       escape: true
     }"
   >
-    <a class="mastodon"></a>
+    <!-- <a class="mastodon"></a> -->
     <a class="twitter"></a>
     <a class="facebook"></a>
     <!-- <a class="linkedin"></a> -->
@@ -18,9 +18,9 @@
     <!-- <a class="messenger" data-fb-app-id="0123456789012345"></a> -->
     <!-- <a class="odnoklassniki"></a> -->
     <!-- <a class="pinterest"></a> -->
-    <a class="pocket"></a>
-    <a class="reddit"></a>
-    <a class="teams"></a>
+    <!-- <a class="pocket"></a> -->
+    <!-- <a class="reddit"></a> -->
+    <!-- <a class="teams"></a> -->
     <a class="telegram"></a>
     <!-- <a class="tumblr"></a>
     <a class="viber"></a> -->

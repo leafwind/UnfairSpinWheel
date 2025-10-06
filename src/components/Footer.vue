@@ -6,7 +6,7 @@
     >
     /
     <a :href="privacyUrl" target="_blank" rel="noopener">Privacy Policy</a>
-    / Copyright © 2023 Jim60105
+    / Copyright © leafwind forked from <a :href="forkedFromUrl" target="_blank" rel="noopener">Jim60105</a>
   </footer>
 </template>
 
@@ -14,7 +14,8 @@
 import { onMounted, ref } from 'vue';
 
 const hash: string | undefined = import.meta.env.VITE_GIT_HASH;
-const baseUrl = 'https://github.com/jim60105/UnfairSpinWheel';
+const baseUrl = 'https://github.com/leafwind/UnfairSpinWheel';
+const forkedFromUrl = 'https://github.com/jim60105/UnfairSpinWheel';
 const version = ref('v.DEVELOP');
 const url = ref(baseUrl);
 const privacyUrl = baseUrl + '/blob/master/privacy-policy.md';
