@@ -17,9 +17,11 @@
   <ShareLink class="w-full flex justify-content-center z-1 mt-3" />
   <div ref="container" class="flex spin-container">
     <picture>
+      <!--
       <source srcset="/img/image.avif" type="image/avif" />
       <source srcset="/img/image.webp" type="image/webp" />
       <img src="/img/image.png" class="image" alt="background image" />
+      -->
     </picture>
     <div
       class="icon"
