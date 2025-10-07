@@ -22,6 +22,7 @@
       <source srcset="/img/image.webp" type="image/webp" />
       <img src="/img/image.png" class="image" alt="background image" />
       -->
+      <img src="/img/daifuku_pointer.png" class="image" alt="background image" />
     </picture>
     <div
       class="icon"
