@@ -63,6 +63,10 @@
               {{ record.donorName }}
               <span v-if="record.amount"> · ${{ record.amount }}</span>
               <span v-if="record.platform"> · {{ record.platform }}</span>
+              <span v-if="record.spinIndex && record.totalSpins"> · {{ record.spinIndex }}/{{ record.totalSpins }}</span>
+            </div>
+            <div v-if="record.donationTimestamp" class="text-sm text-color-secondary mt-1">
+              <i class="pi pi-clock mr-1"></i>贊助時間 {{ formatTime(record.donationTimestamp) }}
             </div>
             <div v-if="record.message" class="text-sm text-color-secondary mt-1 white-space-normal">
               <i class="pi pi-comment mr-1"></i>{{ record.message }}
@@ -91,7 +95,7 @@ function formatTime(timestamp: number): string {
     hour: '2-digit',
     minute: '2-digit',
     second: '2-digit'
-  });
+  }).replace(/(上午|下午)(\d)/, '$1 $2');
 }
 
 function exportTSV() {
