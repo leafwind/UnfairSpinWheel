@@ -242,6 +242,16 @@
           <label for="dd-group" class="block">選擇一個 Demo 功能</label>
         </div>
         <div class="col-12 mb-2">
+          <label for="in-testAmount" class="block mb-2">測試贊助金額</label>
+          <InputNumber
+            v-model="testAmount"
+            inputId="in-testAmount"
+            :min="0"
+            :useGrouping="false"
+            class="w-full"
+          />
+        </div>
+        <div class="col-12 mb-2">
           <Button
             label="測試通知"
             icon="pi pi-bell"
@@ -399,7 +409,7 @@ const testDonationSucceed = () => {
   spinWheelRef.value.handleDonation({
     donate_id: 'test-' + Date.now(),
     name: '測試贊助者',
-    amount: DonateThreshold.value + 10,
+    amount: testAmount.value,
     message: '這是測試贊助！',
     timestamp: Date.now(),
     platform: '蛋蛋子PAY'
@@ -420,12 +430,14 @@ const testDonationFailed = () => {
   spinWheelRef.value.handleDonation({
     donate_id: 'test-' + Date.now(),
     name: '測試贊助者',
-    amount: DonateThreshold.value - 10,
+    amount: Math.max(0, DonateThreshold.value - 1),
     message: '這是金額小於要求的贊助！',
     timestamp: Date.now(),
     platform: '蛋蛋子PAY'
   });
 };
+
+const testAmount = ref(DonateThreshold.value + 10);
 
 const addButton = ref();
 const confirm = useConfirm();

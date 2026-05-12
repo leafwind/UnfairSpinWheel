@@ -57,7 +57,7 @@ const itemService = inject<ItemService>('ItemService');
 const spinRecordService = inject<SpinRecordService>('SpinRecordService');
 const uuid = inject<string | undefined>('uuid');
 
-type SpinContext = Omit<ISpinRecord, 'id' | 'label'>;
+type SpinContext = Omit<ISpinRecord, 'id' | 'label' | 'timestamp'>;
 const spinQueue: SpinContext[] = [];
 
 const properties: WheelProps = {
@@ -182,7 +182,6 @@ const handleDonation = (donationData: {
   const spinCount = Math.floor(donationData.amount / DonateThreshold.value);
   for (let i = 1; i <= spinCount; i++) {
     spinQueue.push({
-      timestamp: Date.now(),
       donationTimestamp: donationData.timestamp,
       donorName: donationData.name,
       amount: donationData.amount,
@@ -263,7 +262,7 @@ const openCongratulationDialog = ($event: {
   const context = spinQueue.shift();
 
   spinRecordService?.addRecord({
-    timestamp: context?.timestamp ?? Date.now(),
+    timestamp: Date.now(),
     label: item.label,
     donorName: context?.donorName,
     amount: context?.amount,
