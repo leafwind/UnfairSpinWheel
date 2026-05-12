@@ -57,7 +57,8 @@ const itemService = inject<ItemService>('ItemService');
 const spinRecordService = inject<SpinRecordService>('SpinRecordService');
 const uuid = inject<string | undefined>('uuid');
 
-let pendingDonation: Omit<ISpinRecord, 'id' | 'timestamp' | 'label'> | undefined = undefined;
+type SpinContext = Omit<ISpinRecord, 'id' | 'label'>;
+const spinQueue: SpinContext[] = [];
 
 const properties: WheelProps = {
   // debug: import.meta.env.DEV,
@@ -177,16 +178,21 @@ const handleDonation = (donationData: {
   // 顯示贊助訊息
   showDonationNotification(donationData);
 
-  // 觸發轉盤
-  if (donationData.amount >= DonateThreshold.value) {
-    pendingDonation = {
+  // 觸發轉盤（金額 / 門檻，無條件捨去）
+  const spinCount = Math.floor(donationData.amount / DonateThreshold.value);
+  for (let i = 1; i <= spinCount; i++) {
+    spinQueue.push({
+      timestamp: Date.now(),
+      donationTimestamp: donationData.timestamp,
       donorName: donationData.name,
       amount: donationData.amount,
       platform: donationData.platform,
-      message: donationData.message
-    };
-    spin();
+      message: donationData.message,
+      spinIndex: i,
+      totalSpins: spinCount
+    });
   }
+  if (spinCount > 0) spin();
 };
 
 const showDonationNotification = (donationData: any) => {
@@ -254,13 +260,19 @@ const openCongratulationDialog = ($event: {
   rotation: number;
 }) => {
   const item = Items.value![$event.currentIndex];
+  const context = spinQueue.shift();
 
   spinRecordService?.addRecord({
-    timestamp: Date.now(),
+    timestamp: context?.timestamp ?? Date.now(),
     label: item.label,
-    ...pendingDonation
+    donorName: context?.donorName,
+    amount: context?.amount,
+    platform: context?.platform,
+    message: context?.message,
+    donationTimestamp: context?.donationTimestamp,
+    spinIndex: context?.spinIndex,
+    totalSpins: context?.totalSpins
   });
-  pendingDonation = undefined;
 
   dialog.open(CongratulationDialog, {
     props: {
@@ -272,6 +284,8 @@ const openCongratulationDialog = ($event: {
     },
     data: { item }
   });
+
+  if (spinQueue.length > 0) spin();
 };
 
 onMounted(async () => {
