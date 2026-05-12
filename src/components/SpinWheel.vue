@@ -281,10 +281,11 @@ const openCongratulationDialog = ($event: {
       contentStyle: 'border: 0; backgroundColor: transparent',
       dismissableMask: true
     },
-    data: { item }
+    data: { item },
+    onClose: () => {
+      if (spinQueue.length > 0) spin();
+    }
   });
-
-  if (spinQueue.length > 0) spin();
 };
 
 onMounted(async () => {
