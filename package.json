@@ -12,14 +12,15 @@
     "type-check": "vue-tsc --noEmit -p tsconfig.app.json --composite false"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.110.7",
     "csv": "^6.3.5",
     "events": "^3.3.0",
     "pako": "^2.1.0",
     "pouchdb-browser": "^9.0.0",
     "pouchdb-find": "^9.0.0",
     "primeflex": "^3.3.1",
-    "primevue": "^3.42.0",
     "primeicons": "^7.0.0",
+    "primevue": "^3.42.0",
     "random": "^4.1.0",
     "shareon": "^2.3.0",
     "spin-wheel": "^5.0.0",

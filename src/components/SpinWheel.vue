@@ -43,6 +43,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, inject, watch, nextTick } from 'vue';
+import { createClient, type SupabaseClient, type RealtimeChannel } from '@supabase/supabase-js';
 import { useToast } from 'primevue/usetoast';
 import random from 'random';
 import { Wheel, type WheelProps } from 'spin-wheel';
@@ -98,71 +99,65 @@ const container = ref();
 
 let spinCount = 0;
 let wheel: Wheel | undefined = undefined;
-let ws: WebSocket | undefined = undefined;
+let supabaseClient: SupabaseClient | undefined = undefined;
+let donationChannel: RealtimeChannel | undefined = undefined;
 
 console.log('🚀 Script setup 已執行');
 
-// ===== WebSocket 相關功能 =====
+// ===== 抖內即時通知（Supabase Realtime）=====
+// 舊版走自建 WebSocket（/donations/ws/{uuid}）；改為訂閱 Supabase Realtime 的 donations:{uuid}。
+// uuid 由網址提供，是這台的存取秘密；同一個 app 分享給所有實況主，靠 uuid 區分。
 
-const WS_URL_PREFIX = `wss://neoripyon.leafwind.tw/donations/ws`;
+const RESOLVE_URL_PREFIX = `https://neoripyon.leafwind.tw/donations/resolve`;
 
-let reconnectDelay = 10000; // Start with 10 seconds
-const MAX_RECONNECT_DELAY = 300000; // 300 seconds (5 minutes)
+const connectDonationRealtime = async (uuid: string) => {
+  console.log('🔌 正在啟用抖內監聽...\n📝 uuid：', uuid);
 
-const connectWebSocket = (uuid?: string) => {
-  console.log('🔌 正在連接 WebSocket...\n📝 uuid：', uuid || '預設');
-
-  const wsUrl = `${WS_URL_PREFIX}/${uuid}`;
-
-  ws = new WebSocket(wsUrl);
-  ws.onopen = () => {
-    console.log('✅ WebSocket 已連接');
-  };
-
-  ws.onmessage = (event) => {
-    try {
-      const data = JSON.parse(event.data);
-      console.log('📨 收到 WebSocket 訊息:', data);
-      
-      // 處理不同類型的事件
-      if (data.type === 'connected') {
-        console.log(`✅ 已連接到頻道：${data.twitch_channel_name}`);
-        console.log(`📝 訊息：${data.message}`);
-
-        // 從 WebSocket 回傳中取得 twitch_channel_name 並顯示 toast
-        const twitchChannelName = data.twitch_channel_name || '未知';
-        toast.add({
-          severity: 'success',
-          summary: '啟用監聽抖內模式',
-          detail: `Twitch: ${twitchChannelName}`,
-          life: 10000
-        });
-
-      } else if (data.type === 'donation') {
-        // 收到贊助通知 -> 觸發轉盤
-        handleDonation(data.data);
-      }
-    } catch (error) {
-      console.error('❌ 解析 WebSocket 訊息失敗:', error);
+  // 1. 以 uuid 解析頻道名與 Supabase 設定（順便驗證 uuid；未知回 404）
+  let config: { twitch_channel_name: string; supabase_url: string; supabase_anon_key: string };
+  try {
+    const res = await fetch(`${RESOLVE_URL_PREFIX}/${uuid}`);
+    if (!res.ok) {
+      console.error('❌ 無效的 uuid 或解析失敗:', res.status);
+      toast.add({
+        severity: 'error',
+        summary: '監聽抖內啟用失敗',
+        detail: '無效的專屬網址，請向 leafwind 確認',
+        life: 10000
+      });
+      return;
     }
-  };
-
-  ws.onerror = (error) => {
-    console.error('❌ WebSocket 錯誤:', error);
-  };
-
-  ws.onclose = (event) => {
-    console.log('🔌 WebSocket 已斷開:', event.code, event.reason);
-    console.log(`🔄 嘗試重新連接，等待 ${reconnectDelay / 1000} 秒...`);
-
-    setTimeout(() => {
-    // 下一次的延遲時間 *= 2，最大不超過 MAX_RECONNECT_DELAY
-      reconnectDelay = Math.min(reconnectDelay * 2, MAX_RECONNECT_DELAY);
-      connectWebSocket(uuid);
-    }, reconnectDelay);
-
+    config = await res.json();
+  } catch (error) {
+    console.error('❌ 解析 uuid 錯誤:', error);
+    toast.add({
+      severity: 'error',
+      summary: '監聽抖內連線失敗',
+      detail: '無法連線到伺服器，請稍後再試',
+      life: 10000
+    });
+    return;
   }
 
+  // 顯示頻道名 toast（取代舊 WebSocket 連上時的 connected 訊息）
+  toast.add({
+    severity: 'success',
+    summary: '啟用監聽抖內模式',
+    detail: `Twitch: ${config.twitch_channel_name || '未知'}`,
+    life: 10000
+  });
+
+  // 2. 訂閱 Realtime 收抖內（supabase-js 自帶自動重連，不用手寫 retry）
+  supabaseClient = createClient(config.supabase_url, config.supabase_anon_key);
+  donationChannel = supabaseClient
+    .channel(`donations:${uuid}`)
+    .on('broadcast', { event: 'donation' }, (msg) => {
+      console.log('📨 收到 Realtime 抖內:', msg.payload);
+      handleDonation((msg.payload as { data: Parameters<typeof handleDonation>[0] }).data);
+    })
+    .subscribe((status) => {
+      console.log('Realtime 訂閱狀態:', status);
+    });
 };
 
 const handleDonation = (donationData: {
@@ -327,8 +322,8 @@ onMounted(async () => {
   // Show toast after a small delay
   await nextTick();
   if (uuid) {
-    // 連接 WebSocket（也會 add toast）
-    connectWebSocket(uuid);
+    // 啟用抖內監聽（也會 add toast）
+    connectDonationRealtime(uuid);
   }
   else {
     // 無監聽抖內功能
@@ -343,12 +338,12 @@ onMounted(async () => {
 });
 
 onUnmounted(() => {
-  // 清理 WebSocket 連接
-  if (ws) {
-    ws.close();
-    ws = undefined;
+  // 清理 Realtime 訂閱
+  if (donationChannel) {
+    supabaseClient?.removeChannel(donationChannel);
+    donationChannel = undefined;
   }
-  reconnectDelay = 10000; // Reset to initial delay
+  supabaseClient = undefined;
 });
 
 // 暴露函數給父組件
