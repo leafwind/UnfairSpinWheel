@@ -150,7 +150,8 @@ const connectDonationRealtime = async (uuid: string) => {
   // 2. 訂閱 Realtime 收抖內（supabase-js 自帶自動重連，不用手寫 retry）
   supabaseClient = createClient(config.supabase_url, config.supabase_anon_key);
   donationChannel = supabaseClient
-    .channel(`donations:${uuid}`)
+    // private 須與 oripyon 發送端一致；不一致會 SUBSCRIBED 但靜默收不到
+    .channel(`donations:${uuid}`, { config: { private: true } })
     .on('broadcast', { event: 'donation' }, (msg) => {
       console.log('📨 收到 Realtime 抖內:', msg.payload);
       handleDonation((msg.payload as { data: Parameters<typeof handleDonation>[0] }).data);
