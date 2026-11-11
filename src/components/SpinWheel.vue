@@ -175,7 +175,9 @@ const handleDonation = (donationData: {
   showDonationNotification(donationData);
 
   // 觸發轉盤（金額 / 門檻，無條件捨去）
-  const spinCount = Math.floor(donationData.amount / DonateThreshold.value);
+  // 門檻 <= 0 時除法會得到 Infinity，迴圈塞爆 spinQueue 讓分頁 OOM crash；改為每筆轉一次
+  const threshold = DonateThreshold.value;
+  const spinCount = threshold > 0 ? Math.floor(donationData.amount / threshold) : 1;
   for (let i = 1; i <= spinCount; i++) {
     spinQueue.push({
       donationTimestamp: donationData.timestamp,
