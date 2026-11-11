@@ -46,9 +46,11 @@
   index.html；拿掉會讓 overlay 網址 404。
 - oripyon 的 CORS（`web_main.py` 的 `allow_origin_regex`）放行 `*.leafwind.tw`，
   所以換 leafwind.tw 底下的子網域不用改 oripyon；換到其他網域則要先改那邊。
-- `unfair.spin-wheel.click` 是上游的網域，不是這個 fork 的部署。
-  `.github/workflows/gh-page.yml` 也是從上游繼承來的。
-- 2026-11 以前部署在 Vercel（`unfair-spin-wheel.vercel.app`），專案已刪除。
+- `unfair.spin-wheel.click` 是上游的網域，不是這個 fork 的部署。上游的 GitHub Pages
+  workflow 已移除，不要再加回來（它會寫入上游的 CNAME）。
+- Vercel（`unfair-spin-wheel.vercel.app`）也有部署，從 GitHub master 自動建置，
+  `vercel.json` 負責 `/<uuid>` 的 SPA rewrite。兩處同時存在，改動後兩邊都要上線
+  （Vercel 隨 push 自動部署，Cloudflare 需手動 `wrangler deploy`）。
 
 ## 輸出風格
 
