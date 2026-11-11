@@ -40,7 +40,8 @@
 
 部署在 leafwind 的 Cloudflare Workers（static assets），設定在 `wrangler.jsonc`，
 正式站 `https://spin.leafwind.tw`（custom domain，DNS 由 wrangler 自動建立）。
-部署：`npm run build && npx wrangler deploy`。
+部署：`npm run build && npx wrangler deploy`，刻意手動。repo 是 fork，Workers Builds
+選不到；改用 GitHub Actions 又得把 Cloudflare API token 放進 secrets，增加攻擊面，不值得。
 
 - `/<uuid>` 這種路徑靠 `not_found_handling: "single-page-application"` fallback 到
   index.html；拿掉會讓 overlay 網址 404。
