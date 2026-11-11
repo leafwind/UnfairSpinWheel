@@ -4,12 +4,6 @@ import { stringify } from 'csv-stringify/browser/esm/sync';
 import { Items } from '@/services/ItemService';
 
 export class StringHelper {
-  public static compress = (input: string) =>
-    btoa(String.fromCodePoint(...pako.deflate(input)))
-      .replace(/\+/g, '-')
-      .replace(/\//g, '_')
-      .replace(/=+$/, '');
-
   public static decompress = (input: string) => {
     let str = input.replace(/-/g, '+').replace(/_/g, '/');
     while (str.length % 4 !== 0) {

@@ -16,7 +16,6 @@
       }
     }"
   />
-  <ShareLink class="w-full flex justify-content-center z-1 mt-3" />
   <div ref="container" class="flex spin-container mt-3">
     <picture>
       <!--

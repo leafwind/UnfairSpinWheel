@@ -35,7 +35,6 @@ import FileUpload from 'primevue/fileupload';
 import 'primevue/resources/themes/bootstrap4-dark-blue/theme.css';
 import 'primeicons/primeicons.css';
 import 'primeflex/primeflex.scss';
-import 'shareon/css';
 import '@/assets/app.scss';
 import '@/assets/OBS.scss';
 if (navigator.userAgent.indexOf('OBS') !== -1) {
@@ -47,7 +46,6 @@ import ItemInputGroup from '@/components/sidebar-panel/ItemInputGroup.vue';
 import SidebarPanel from '@/components/sidebar-panel/SidebarPanel.vue';
 import CongratulationDialog from '@/components/CongratulationDialog.vue';
 import Footer from '@/components/Footer.vue';
-import ShareLink from '@/components/ShareLink.vue';
 import { ItemService } from '@/services/ItemService';
 import { SidebarService } from '@/services/SidebarService';
 import { LeftSidebarService } from '@/services/LeftSidebarService';
@@ -130,6 +128,5 @@ app.component('SidebarPanel', SidebarPanel);
 app.component('LeftSidebarPanel', LeftSidebarPanel);
 app.component('CongratulationDialog', CongratulationDialog);
 app.component('Footer', Footer);
-app.component('ShareLink', ShareLink);
 
 app.mount('#app');
