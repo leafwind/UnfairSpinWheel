@@ -17,19 +17,12 @@
     }"
   />
   <div ref="container" class="flex spin-container mt-3">
-    <picture>
-      <!--
-      <source srcset="/img/image.avif" type="image/avif" />
-      <source srcset="/img/image.webp" type="image/webp" />
-      <img src="/img/image.png" class="image" alt="background image" />
-      -->
-      <img src="/img/daifuku_pointer.png" class="image" alt="background image" />
-    </picture>
+    <img src="/img/daifuku_pointer.png" class="image" alt="background image" />
     <div
       class="icon"
-      @click="spin"
-      @keyup.enter="spin"
-      @keyup.space="spin"
+      @click="manualSpin"
+      @keyup.enter="manualSpin"
+      @keyup.space="manualSpin"
       v-tooltip.bottom="{
         value: `↻ Spin!`,
         class: 'text-xl',
@@ -57,8 +50,22 @@ const itemService = inject<ItemService>('ItemService');
 const spinRecordService = inject<SpinRecordService>('SpinRecordService');
 const uuid = inject<string | undefined>('uuid');
 
+export interface DonationData {
+  donate_id: string;
+  name: string;
+  amount: number;
+  message: string;
+  timestamp: number;
+  platform: string;
+}
+
 type SpinContext = Omit<ISpinRecord, 'id' | 'label' | 'timestamp'>;
+// 待轉的抖內；一筆抖內依金額展開成多次
 const spinQueue: SpinContext[] = [];
+// 本次轉動對應的抖內，手動轉為 undefined
+let currentContext: SpinContext | undefined = undefined;
+// 轉動中或結果視窗開著時為 true；結果視窗需實況主手動點掉才會關
+let busy = false;
 
 const properties: WheelProps = {
   // debug: import.meta.env.DEV,
@@ -152,21 +159,14 @@ const connectDonationRealtime = async (uuid: string) => {
     .channel(`donations:${uuid}`, { config: { private: true } })
     .on('broadcast', { event: 'donation' }, (msg) => {
       console.log('📨 收到 Realtime 抖內:', msg.payload);
-      handleDonation((msg.payload as { data: Parameters<typeof handleDonation>[0] }).data);
+      handleDonation((msg.payload as { data: DonationData }).data);
     })
     .subscribe((status) => {
       console.log('Realtime 訂閱狀態:', status);
     });
 };
 
-const handleDonation = (donationData: {
-  donate_id: string;
-  name: string;
-  amount: number;
-  message: string;
-  timestamp: number;
-  platform: string;
-}) => {
+const handleDonation = (donationData: DonationData) => {
   console.log('🎉 收到贊助:', donationData);
 
   // 顯示贊助訊息
@@ -187,10 +187,10 @@ const handleDonation = (donationData: {
       totalSpins: spinCount
     });
   }
-  if (spinCount > 0) spin();
+  spinNextInQueue();
 };
 
-const showDonationNotification = (donationData: any) => {
+const showDonationNotification = (donationData: DonationData) => {
   console.log(`💰 ${donationData.name} 從${donationData.platform}贊助了 $${donationData.amount}！`);
   console.log(`💬 留言: ${donationData.message}`);
 
@@ -200,13 +200,6 @@ const showDonationNotification = (donationData: any) => {
     detail: `${donationData.name} 從${donationData.platform}贊助了 $${donationData.amount} 💬 ${donationData.message}`,
     life: 300000  // 5 分鐘後自動消失
   });
-};
-
-const stopAndClearSound = () => {
-  if (!wheel) return;
-
-  wheel.onCurrentIndexChange = () => {};
-  wheel.stop();
 };
 
 const playSound = () => {
@@ -220,27 +213,29 @@ const playSound = () => {
   audio.play();
 };
 
+const spinNextInQueue = () => {
+  if (busy || spinQueue.length === 0) return;
+  currentContext = spinQueue.shift();
+  spin();
+};
+
+const manualSpin = () => {
+  if (busy) return;
+  currentContext = undefined;
+  spin();
+};
+
 const spin = () => {
   if (!wheel) return;
+  busy = true;
 
   wheel.onCurrentIndexChange = () => {
     if (!wheel) return;
 
     playSound();
 
-    // Change rotation resistance based on current speed.
-    // Provide a more entertaining performance.
-    switch (true) {
-      case wheel.rotationSpeed < 400:
-        wheel.rotationResistance = -100;
-        break;
-      case wheel.rotationSpeed < 100:
-        wheel.rotationResistance = -30;
-        break;
-      case wheel.rotationSpeed < 30:
-        wheel.rotationResistance = -10;
-        break;
-    }
+    // 低速時減小阻力，拉長最後的懸念
+    if (wheel.rotationSpeed < 400) wheel.rotationResistance = -100;
   };
 
   wheel.rotationResistance = -400;
@@ -255,7 +250,8 @@ const openCongratulationDialog = ($event: {
   rotation: number;
 }) => {
   const item = Items.value![$event.currentIndex];
-  const context = spinQueue.shift();
+  const context = currentContext;
+  currentContext = undefined;
 
   spinRecordService?.addRecord({
     timestamp: Date.now(),
@@ -279,7 +275,8 @@ const openCongratulationDialog = ($event: {
     },
     data: { item },
     onClose: () => {
-      if (spinQueue.length > 0) spin();
+      busy = false;
+      spinNextInQueue();
     }
   });
 };
@@ -302,10 +299,7 @@ onMounted(async () => {
 
   wheel.spin(10);
 
-  wheel.onRest = ($event) => {
-    stopAndClearSound;
-    openCongratulationDialog($event);
-  };
+  wheel.onRest = openCongratulationDialog;
 
   // Workaround for itemLabelRadiusMax not working on first load.
   setTimeout(() => {
@@ -343,7 +337,7 @@ onUnmounted(() => {
 // 暴露函數給父組件
 defineExpose({
   handleDonation,
-  spin
+  spin: manualSpin
 });
 </script>
 
@@ -388,22 +382,6 @@ defineExpose({
   @media (min-width: map-get($breakpoints, 'md')) {
     height: 110vh;
     top: calc(calc(50%) - calc(110vh / 2));
-  }
-}
-
-.button-container {
-  margin-top: -5.5rem;
-
-  button {
-    z-index: 2;
-    position: relative;
-
-    $background-color: #0c0f1d;
-    background: $background-color;
-
-    &:hover {
-      filter: brightness(1.3);
-    }
   }
 }
 

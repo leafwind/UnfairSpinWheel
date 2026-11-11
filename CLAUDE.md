@@ -22,6 +22,9 @@
 4. 事件形狀：`msg.payload` 為 `{ type: "donation", data: { donate_id, name, amount,
    message, timestamp, platform } }`；取 `payload.data` 傳給 `handleDonation`。
 5. 行為：每筆抖內轉 `floor(amount / 門檻)` 次。
+6. 使用方式：實況主開一般瀏覽器視窗，用擷取畫面放上直播（不是 OBS browser source）。
+   結果視窗刻意不自動關閉，由實況主手動點掉；轉動中或結果視窗開著時，抖內排進
+   `spinQueue`，等視窗關掉才轉下一次。手動點轉盤在忙碌時會被忽略，結果也不記成抖內。
 
 ## 安全模型（務必維持）
 
