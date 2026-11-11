@@ -1,0 +1,11 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "unfair-spin-wheel",
+  "compatibility_date": "2026-11-01",
+  "assets": {
+    "directory": "./dist",
+    // 網址最後一段是 overlay UUID（例如 /eae638df-...），需 fallback 到 index.html
+    "not_found_handling": "single-page-application"
+  },
+  "routes": [{ "pattern": "spin.leafwind.tw", "custom_domain": true }]
+}

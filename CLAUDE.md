@@ -38,8 +38,17 @@
 
 ## 部署
 
-部署在 leafwind 自己的 Vercel（`unfair-spin-wheel*.vercel.app`），oripyon 的 CORS
-只放行這個來源打 `GET /donations/resolve/{uuid}`。正式站 `https://unfair.spin-wheel.click`。
+部署在 leafwind 的 Cloudflare Workers（static assets），設定在 `wrangler.jsonc`，
+正式站 `https://spin.leafwind.tw`（custom domain，DNS 由 wrangler 自動建立）。
+部署：`npm run build && npx wrangler deploy`。
+
+- `/<uuid>` 這種路徑靠 `not_found_handling: "single-page-application"` fallback 到
+  index.html；拿掉會讓 overlay 網址 404。
+- oripyon 的 CORS（`web_main.py` 的 `allow_origin_regex`）放行 `*.leafwind.tw`，
+  所以換 leafwind.tw 底下的子網域不用改 oripyon；換到其他網域則要先改那邊。
+- `unfair.spin-wheel.click` 是上游的網域，不是這個 fork 的部署。
+  `.github/workflows/gh-page.yml` 也是從上游繼承來的。
+- 2026-11 以前部署在 Vercel（`unfair-spin-wheel.vercel.app`），專案已刪除。
 
 ## 輸出風格
 
