@@ -4,8 +4,6 @@
     <a :href="url" target="_blank" rel="noopener"
       >{{ version }}<i class="pi pi-github vertical-align-middle m-2"></i>AGPL-3.0 Licensed</a
     >
-    /
-    <a :href="privacyUrl" target="_blank" rel="noopener">Privacy Policy</a>
     / Copyright © leafwind forked from <a :href="forkedFromUrl" target="_blank" rel="noopener">Jim60105</a>
   </footer>
 </template>
@@ -18,7 +16,6 @@ const baseUrl = 'https://github.com/leafwind/UnfairSpinWheel';
 const forkedFromUrl = 'https://github.com/jim60105/UnfairSpinWheel';
 const version = ref('v.DEVELOP');
 const url = ref(baseUrl);
-const privacyUrl = baseUrl + '/blob/master/privacy-policy.md';
 
 onMounted(() => {
   if (hash) {

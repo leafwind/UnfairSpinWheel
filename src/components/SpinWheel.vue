@@ -97,7 +97,6 @@ const properties: WheelProps = {
 
 const container = ref();
 
-let spinCount = 0;
 let wheel: Wheel | undefined = undefined;
 let supabaseClient: SupabaseClient | undefined = undefined;
 let donationChannel: RealtimeChannel | undefined = undefined;
@@ -307,13 +306,6 @@ onMounted(async () => {
   wheel.onRest = ($event) => {
     stopAndClearSound;
     openCongratulationDialog($event);
-  };
-
-  wheel.onSpin = () => {
-    gtag('event', 'spin');
-    gtag('event', 'spin_count', {
-      count: ++spinCount
-    });
   };
 
   // Workaround for itemLabelRadiusMax not working on first load.

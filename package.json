@@ -29,7 +29,6 @@
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.3.3",
     "@tsconfig/node18": "^18.2.2",
-    "@types/gtag.js": "^0.0.20",
     "@types/node": "^22.0.0",
     "@types/pako": "^2.0.2",
     "@types/pouchdb-browser": "^6.1.3",

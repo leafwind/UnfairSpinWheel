@@ -149,64 +149,6 @@ const inputGroup = async () => {
 };
 
 onMounted(async () => {
-  if (import.meta.env.DEV) {
-    // Add dummy gtag for dev
-    window.gtag = (...args: any[]) => {
-      console.debug('gtag', ...args);
-    };
-  } else if (navigator.globalPrivacyControl) {
-    // Don't track if user has enabled Global Privacy Control
-    window.gtag = () => {};
-    console.log(
-      '%cWe can see that you have enabled the Global Privacy Control, indicating that you do not wish to have your information sold or shared.',
-      'font-weight:bold; color: lightgreen;',
-      '\nYour privacy is important to us, and we completely honor your choice.',
-      'As a result, we have deactivated Google Analytics and Microsoft Clarity. 😉'
-    );
-  } else if (navigator.userAgent.indexOf('OBS') > 0) {
-    // Don't track in OBS mode to reduce performance impact
-    window.gtag = () => {};
-  } else if (import.meta.env.PROD) {
-    // Setup GA
-    (function (id) {
-      const gtagScript = document.createElement('script');
-      gtagScript.async = true;
-      gtagScript.src = 'https://www.googletagmanager.com/gtag/js?id=' + id;
-
-      document.head.appendChild(gtagScript);
-
-      const dataLayerScript = document.createElement('script');
-      dataLayerScript.innerHTML = `
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', '${id}');`;
-      document.head.appendChild(dataLayerScript);
-    })(import.meta.env.VITE_GA_TRACKING_ID);
-
-    // Setup Clarity
-    (function (c: any, l: Document, a: string, r: string, i: string, t: any, y: any) {
-      c[a] =
-        c[a] ||
-        function (...args: any[]) {
-          (c[a].q = c[a].q || []).push(args);
-        };
-      t = l.createElement(r);
-      t.async = 1;
-      t.src = 'https://www.clarity.ms/tag/' + i;
-      y = l.getElementsByTagName(r)[0];
-      y.parentNode.insertBefore(t, y);
-    })(
-      window,
-      document,
-      'clarity',
-      'script',
-      import.meta.env.VITE_CLARITY_TRACKING_ID,
-      undefined,
-      undefined
-    );
-  }
-
   const params = new URLSearchParams(window.location.search);
   const data = params.get('data');
   const group = params.get('group') ?? 'New Group Name';
